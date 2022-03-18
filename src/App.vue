@@ -3,13 +3,18 @@
     <img alt="Vue logo" src="./assets/logo.png" />
     <!-- <img :src="contact.pictureUrl"> -->
     <h1>IronContacts</h1>
-    <div><button @click="addContact">Add Random Contact</button></div>
+    <div>
+      <button @click="addContact">Add Random Contact</button>
+      <button @click="sortPopularity">Sort By Popularity</button>
+      <button @click="sortName">Sort By Name</button>
+    </div>
     <div class="header">
       <h2>Picture</h2>
       <h2>Name</h2>
       <h2>Popularity</h2>
       <h2>Won Oscar</h2>
       <h2>Won Emmy</h2>
+      <h2>Actions</h2>
     </div>
     <div class="contact" v-for="contact in initialList">
       <img :src="contact.pictureUrl" :alt="contact.name" width="50" />
@@ -19,6 +24,7 @@
       <div v-else></div>
       <div v-if="contact.wonEmmy">🏆</div>
       <div v-else></div>
+      <div><button @click="deleteContact">Delete</button></div>
     </div>
     <!-- <HelloWorld msg="Hello Vue 3 + Vite" /> -->
   </div>
@@ -29,21 +35,29 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import HelloWorld from "./components/HelloWorld.vue";
 import contacts from "./contacts.json";
+import { ref, reactive, computed } from "vue";
 
-const myContacts = contacts;
-let initialList = myContacts.slice(0, 5);
-let remaining = myContacts.slice(5);
-// console.log(initialList);
-// console.log(remaining);
+const myContacts = reactive(contacts);
+const initialList = reactive(contacts.slice(0, 5)); // initially 5
+const remaining = reactive(contacts.slice(5)); // the remaning 47
 
 function addContact() {
-  let randomNum = Math.floor(Math.random() * remaining.length);
-  // console.log(randomNum);
-  console.log(remaining[randomNum]);
-  const newList = initialList.push(remaining[randomNum]);
-  initialList = newList;
-  
+  const randomNum = Math.floor(Math.random() * remaining.length);
+  // pick a random actor from the remaining list
+
+  initialList.push(remaining[randomNum]); // add actor to the initial list
+  remaining.splice(randomNum, 1); // remove actor from the remaining list
 }
+
+function sortPopularity() {
+  initialList.sort((a, b) => (a.popularity < b.popularity ? 1 : -1));
+}
+
+function sortName() {
+  initialList.sort((a, b) => (a.name > b.name ? 1 : -1));
+}
+
+function deleteContact() {}
 </script>
 
 <style>
