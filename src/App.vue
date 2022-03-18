@@ -1,9 +1,9 @@
 <template>
   <div>
-    <img alt="Vue logo" src="./assets/logo.png" />
+    <img width="100" alt="Vue logo" src="./assets/logo.png" />
     <!-- <img :src="contact.pictureUrl"> -->
     <h1>IronContacts</h1>
-    <div>
+    <div class="buttons">
       <button @click="addContact">Add Random Contact</button>
       <button @click="sortPopularity">Sort By Popularity</button>
       <button @click="sortName">Sort By Name</button>
@@ -24,7 +24,9 @@
       <div v-else></div>
       <div v-if="contact.wonEmmy">🏆</div>
       <div v-else></div>
-      <div><button @click="deleteContact">Delete</button></div>
+      <div>
+        <button @click="deleteContact(contact)">Delete</button>
+      </div>
     </div>
     <!-- <HelloWorld msg="Hello Vue 3 + Vite" /> -->
   </div>
@@ -57,7 +59,10 @@ function sortName() {
   initialList.sort((a, b) => (a.name > b.name ? 1 : -1));
 }
 
-function deleteContact() {}
+function deleteContact(contact) {
+  const index = initialList.indexOf(contact);
+  initialList.splice(index, 1);
+}
 </script>
 
 <style>
@@ -69,8 +74,9 @@ function deleteContact() {}
   color: #2c3e50;
   margin-top: 60px;
 }
+
 .header,
-.contact {
+.contact, .buttons {
   display: flex;
   gap: 30px;
   margin: 10px;
